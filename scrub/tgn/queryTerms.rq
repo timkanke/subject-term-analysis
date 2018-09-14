@@ -1,0 +1,15 @@
+# file: TGNOut_2Terms.nt
+# load into tdb and retrieve id,term
+# $ tdbloader --loc my_tdb_store TGNOut_2Terms.nt
+# $ tdbquery --loc my_tdb_store --results CSV --query queryTerms.rq > tgnLabels.csv
+
+
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+select ?id ?prefLabel
+where 
+{
+?id <http://vocab.getty.edu/ontology#prefLabelGVP> ?prefLabel .
+}
+#LIMIT 20
+

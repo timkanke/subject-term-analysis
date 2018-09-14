@@ -1,0 +1,13 @@
+# file: TGNOut_2Terms.nt
+# retrieve id and term
+# $ arq --data TGNOut_2Terms.nt --query queryTerms.rq --results csv > tgnLabels.csv
+
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+select ?id ?label
+where 
+{
+?id <http://vocab.getty.edu/ontology#term> ?label .
+}
+#LIMIT 20
+

@@ -1,0 +1,25 @@
+# file: FASTChronological.nt
+# retrieve id,label
+
+# $ arq --data FASTChronological.nt --query fastQuery.rq --results csv > FASTChronologicalLabels.csv
+# $ arq --data FASTCorporate.nt --query fastQuery.rq --results csv > FASTCorporate.csv
+# $ arq --data FASTEvent.nt --query fastQuery.rq --results csv > FASTEvent.csv
+# $ arq --data FASTFormGenre.nt --query fastQuery.rq --results csv > FASTFormGenre.csv
+# $ arq --data FASTGeographic.nt --query fastQuery.rq --results csv > FASTGeographic.csv
+# $ arq --data FASTTitle.nt --query fastQuery.rq --results csv > FASTTitle.csv
+# $ arq --data FASTTopical.nt --query fastQuery.rq --results csv > FASTTopical.csv
+
+# load into tdb and retrieve id,label
+# $ tdbloader --loc my_tdb_store FASTPersonal.nt
+# $ tdbquery --loc my_tdb_store --results CSV --query fastQuery.rq > FASTPersonal.csv
+
+
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+select ?id ?label
+where 
+{
+?id <http://schema.org/name> ?label .
+}
+#LIMIT 20
+

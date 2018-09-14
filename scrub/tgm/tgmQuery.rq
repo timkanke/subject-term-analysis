@@ -1,0 +1,13 @@
+# file: vocabularygraphicMaterials.nt
+# retrieve id and authoritativeLabel
+# $ arq --data vocabularygraphicMaterials.nt --query tgmQuery.rq --results csv > tgmLabels.csv
+
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+select ?id ?label
+where 
+{
+?id <http://www.loc.gov/mads/rdf/v1#authoritativeLabel> ?label .
+}
+#LIMIT 20
+

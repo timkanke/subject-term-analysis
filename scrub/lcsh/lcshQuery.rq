@@ -1,0 +1,16 @@
+# file: authoritiessubjects.skos.nt
+# load into tdb and retrieve id,authoritativeLabel
+
+# $ tdbloader --loc my_tdb_store authoritiessubjects.skos.nt
+# $ tdbquery --loc my_tdb_store --results CSV --query lcshQuery.rq > lcshLabels.csv
+
+
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+select ?id ?label
+where 
+{
+?id <http://www.w3.org/2004/02/skos/core#prefLabel> ?label .
+}
+#LIMIT 20
+
