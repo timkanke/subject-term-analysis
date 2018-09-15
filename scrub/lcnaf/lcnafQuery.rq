@@ -1,0 +1,105 @@
+# file: authoritiesnames.both.nt
+# retrieve id and authoritativeLabel
+# $ arq --data authoritiesnames.both.nt --query lcnafQuery.rq --results csv > lcnafLabels.csv
+
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+select ?id ?label
+where 
+{
+?id <http://www.loc.gov/mads/rdf/v1#authoritativeLabel> ?label .
+}
+#LIMIT 20
+
+# <http://www.w3.org/2004/02/skos/core#prefLabel>
+
+
+# load into tdb
+# $ tdbloader --loc my_tdb_store authoritiesnames.both.nt
+# $ tdbquery --loc my_tdb_store --results CSV --query lcnafQuery.rq > lcnaf.csv
+
+
+# error illegal character, clean-up required before running script
+# change illegal character
+# display offending line
+# sed -n '494598p' authoritiesnames.both.nt
+# replace line
+# sed -i 'Ns/AAA/BBB/' file_name
+# sed -i '494598s_<http://id.loc.gov/authorities/na}es/n00034685> <http://www.loc.gov/mads/rdf/v1#authoritativeLabel> "Ri︠a︡zanskiĭ gosudarstvennyĭ pedagogicheskiĭ universitet imeni S.A. Esenina. Kafedra otechestvennoĭ istorii"@en ._<http://id.loc.gov/authorities/names/n00034685> <http://www.loc.gov/mads/rdf/v1#authoritativeLabel> "Ri︠a︡zanskiĭ gosudarstvennyĭ pedagogicheskiĭ universitet imeni S.A. Esenina. Kafedra otechestvennoĭ istorii"@en ._' authoritiesnames.both.nt
+
+
+# error message
+# org.apache.jena.riot.RiotException: [line: 20329130, col: 12] Expected IRI: Got: [KEYWORD:loc.gov]
+# $ sed -n '20329130p' authoritiesnames.both.nt
+# <http://id>loc.gov/authorities/names/n2010007589> <http://id.loc.gov/vocabulary/identifiers/lccn> "n 2010007589" .
+# replace line
+# sed -i 'Ns_AAA_BBB_' file_name
+# sed -i '20329130s_<http://id>loc.gov/authorities/names/n2010007589> <http://id.loc.gov/vocabulary/identifiers/lccn> "n 2010007589" ._<http://id.loc.gov/authorities/names/n2010007589> <http://id.loc.gov/vocabulary/identifiers/lccn> "n 2010007589" ._' authoritiesnames.both.nt
+
+
+
+
+
+# error message????
+# org.apache.jena.riot.RiotException: [line: 10448562, col: 122] Failed to find a prefix name or keyword: (26;0x001A)
+# $ sed -n '10448562p' authoritiesnames.both.nt
+# _:bnode15723721439393126823 <http://purl.org/vocab/changeset/schema#creatorName> <http://id.loc.gov/vocabulary/organizations/dlc> .
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# core dump error due to enormous file size, try spliting the file
+# split -nl/12 authoritiesnames.both.nt
+
+# out of memory error, try using TDB to store and index the file then query it
+# $ tdbloader --loc xaa_tdb_store xaa.nt
+# $ tdbquery --loc xaa_tdb_store --results CSV --query lcnafQuery.rq > part1.csv
+
+# $ tdbloader --loc xab_tdb_store xab.nt
+# $ tdbquery --loc xab_tdb_store --results CSV --query lcnafQuery.rq > part2.csv
+
+# $ tdbloader --loc xac_tdb_store xac.nt
+# $ tdbquery --loc xac_tdb_store --results CSV --query lcnafQuery.rq > part3.csv
+
+# $ tdbloader --loc xad_tdb_store xad.nt
+# $ tdbquery --loc xad_tdb_store --results CSV --query lcnafQuery.rq > part4.csv
+
+# $ tdbloader --loc xae_tdb_store xae.nt
+# $ tdbquery --loc xae_tdb_store --results CSV --query lcnafQuery.rq > part5.csv
+
+# $ tdbloader --loc xaf_tdb_store xaf.nt
+# $ tdbquery --loc xaf_tdb_store --results CSV --query lcnafQuery.rq > part6.csv
+
+# $ tdbloader --loc xag_tdb_store xag.nt
+# $ tdbquery --loc xag_tdb_store --results CSV --query lcnafQuery.rq > part7.csv
+
+# $ tdbloader --loc xah_tdb_store xah.nt
+# $ tdbquery --loc xah_tdb_store --results CSV --query lcnafQuery.rq > part8.csv
+
+# $ tdbloader --loc xai_tdb_store xai.nt
+# $ tdbquery --loc xai_tdb_store --results CSV --query lcnafQuery.rq > part9.csv
+
+# $ tdbloader --loc xaj_tdb_store xaj.nt
+# $ tdbquery --loc xaj_tdb_store --results CSV --query lcnafQuery.rq > part10.csv
+
+# $ tdbloader --loc xak_tdb_store xak.nt
+# $ tdbquery --loc xak_tdb_store --results CSV --query lcnafQuery.rq > part11.csv
+
+# $ tdbloader --loc xal_tdb_store xal.nt
+# $ tdbquery --loc xal_tdb_store --results CSV --query lcnafQuery.rq > part12.csv
+
