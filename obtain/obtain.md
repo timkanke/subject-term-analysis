@@ -2,7 +2,7 @@
 
 ## Obtain specific DPLA metadata
 Working with a local copy of DPLA metadata in PySpark
-
+- retrieve csv file containing subject, id, provider, intermediateProvider, and dataProvider
 ```python
 # libraries
 from pyspark.sql.functions import *
@@ -28,9 +28,14 @@ dfHubList = dfIndivSub.select('provider').distinct()
 dfGPO = dfIndivSub.filter(dfIndivSub.provider.contains('United States Government Publishing Office (GPO)')).select('subject', 'id', 'provider', 'intermediateProvider', 'dataProvider')
 dfGPO.write.csv('/path/to/dfGPO.csv')
 ```
+- move newly created folder containing files into a folder titled 'data'
+
 
 ## Obtain controlled vocabularies
 The primary vocabularies that are used to sort the subject terms are from Library of Congress, The Getty Research Institute, and OCLC.
+Steps:
+- Download controlled vocabularies from each institution
+- Move each vocabulary into a separate within a folder titled 'vocab'
 
 ### Library of Congress
 Three of the vocabularies are provided by the Library of Congress: LC Subject Headings (LCSH), LC Name Authority File (LCNAF), and Thesaurus of Graphic Materials (TGM). These vocabularies are available as bulk download (http://id.loc.gov/download/) in RDF/XML and N-Triples serializations. Download the N-Triples files.
