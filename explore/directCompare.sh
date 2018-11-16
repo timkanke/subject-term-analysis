@@ -37,9 +37,9 @@ echo $AATfounddistinct "aat distinct terms"
 
 # filter out FASTChronologicalTerms.csv
 grep -Fvxf ../vocab/FASTChronologicalTerms.csv $file > $folder/FASTChronologicalremoved.txt
-FASTChronologicalfound=`grep -Ff ../vocab/FASTChronologicalTerms.csv $file | wc -l`
+FASTChronologicalfound=`grep -Ff $vocab/FASTChronologicalTerms.csv $file | wc -l`
 echo $FASTChronologicalfound "FASTChronological terms found"
-FASTChronologicalfounddistinct=`grep -Ff ../vocab/FASTChronologicalTerms.csv $file | awk ' { tot[$0]++ } END { for (i in tot) print tot[i],"\t",i } ' | wc -l`
+FASTChronologicalfounddistinct=`grep -Ff $vocab/FASTChronologicalTerms.csv $file | awk ' { tot[$0]++ } END { for (i in tot) print tot[i],"\t",i } ' | wc -l`
 echo $FASTChronologicalfounddistinct "FASTChronological distinct terms"
 
 # filter out FASTCorporateTerms.csv

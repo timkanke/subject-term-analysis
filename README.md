@@ -5,9 +5,9 @@ This project is a subject term analysis method for DPLA metadata using a collect
 
 This method has three primary stages:
 
--Obtain
--Scrub
--Explore
+- Obtain
+- Scrub
+- Explore
 
 Each of these stages have their own folder and the directions can be found in a markdown file. In order to use this method download this repostiory. Next, create two additional folders named 'data' and 'vocab'. The data folder will contain DPLA metadata files for the obtain, scrub, and explore stages. The vocab folder will contain controlled vocabularies using the obtain and scrub stages.
 

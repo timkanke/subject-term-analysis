@@ -1,66 +1,67 @@
 #!bin/bash
 
 file=`ls *_Terms.csv`
-#vocab=../vocab
+vocab=../../vocab
 folder=chainCompare
+output=complexTermsBrokenIntoSingles.csv
+
+complexTermsFoundTotal=`wc -l < $folder/complexTermsFound.txt`
+complexTermsFoundDistinct=`cat $folder/complexTermsFound.txt | awk ' { tot[$0]++ } END { for (i in tot) print tot[i],"\t",i } ' | wc -l`
+echo $complexTermsFoundTotal "complex terms found"
+echo $complexTermsFoundDistinct "complex distinct terms found"
 
 # replace double dash delimiter with pipe and remove brackets
 awk '$0=gensub("--","|","g")' $folder/complexTermsFound.txt | sed 's:^.\(.*\).$:\1:' > $folder/complexTermsFound.csv
 
+# split terms to thier own line
+cat $folder/complexTermsFound.csv | tr '|' $'\n' > $folder/complexTermsSingle.txt
+
+# perform match to lcsh and lcnaf
+filewc=`wc -l < $folder/complexTermsSingle.txt`
+echo $filewc "single term  occurrences"
+filewcdistinct=`cat $folder/complexTermsSingle.txt | awk ' { tot[$0]++ } END { for (i in tot) print tot[i],"\t",i } ' | sort -nr | wc -l`
+echo $filewcdistinct "single distinct terms"
+
+# add brackets to have same format as control vocab
+sed 's/^/[/' $folder/complexTermsSingle.txt > temp
+sed 's/$/]/' temp > $folder/complexTermsSingle.txt
+rm -f temp
+
+# filter out LCNAF
+grep -Fvxf $vocab/lcnafTerms/lcnaf_1.csv $folder/complexTermsSingle.txt > $folder/LCNAF_1_removed.txt
+grep -Fvxf $vocab/lcnafTerms/lcnaf_2.csv $folder/LCNAF_1_removed.txt > $folder/LCNAF_2_removed.txt
+grep -Fvxf $vocab/lcnafTerms/lcnaf_3.csv $folder/LCNAF_2_removed.txt > $folder/LCNAF_3_removed.txt
+grep -Fvxf $vocab/lcnafTerms/lcnaf_4.csv $folder/LCNAF_3_removed.txt > $folder/LCNAF_4_removed.txt
+grep -Fvxf $vocab/lcnafTerms/lcnaf_5.csv $folder/LCNAF_4_removed.txt > $folder/LCNAF_5_removed.txt
+grep -Fvxf $vocab/lcnafTerms/lcnaf_6.csv $folder/LCNAF_5_removed.txt > $folder/LCNAF_6_removed.txt
+grep -Fvxf $vocab/lcnafTerms/lcnaf_7.csv $folder/LCNAF_6_removed.txt > $folder/LCNAF_7_removed.txt
+grep -Fvxf $vocab/lcnafTerms/lcnaf_8.csv $folder/LCNAF_7_removed.txt > $folder/LCNAF_8_removed.txt
+grep -Fvxf $vocab/lcnafTerms/lcnaf_9.csv $folder/LCNAF_8_removed.txt > $folder/LCNAFremoved.txt
+
+# filter out LCSH
+grep -Fvxf $vocab/lcshTerms.csv $folder/LCNAFremoved.txt > $folder/complexTermsSingleExactMatchesRemoved.txt
+
+# remove temp files
+rm -f $folder/LCNAF*removed.txt
+
+# create file with found terms
+grep -Fvxf $folder/complexTermsSingleExactMatchesRemoved.txt $folder/complexTermsSingle.txt > $folder/complexTermsSingleExactMatchesFound.txt
+
+complexTermsSingleExactMatchesFoundTotal=`wc -l < $folder/complexTermsSingleExactMatchesFound.txt`
+complexTermsSingleExactMatchesFoundDistinct=`cat $folder/complexTermsSingleExactMatchesFound.txt | awk ' { tot[$0]++ } END { for (i in tot) print tot[i],"\t",i } ' | wc -l`
+echo $complexTermsSingleExactMatchesFoundTotal "exact match single terms found"
+echo $complexTermsSingleExactMatchesFoundDistinct "exact match single distinct terms found"
+
+complexTermsSingleMysteryLeftovers=`wc -l < $folder/complexTermsSingleExactMatchesRemoved.txt`
+complexTermsSingleMysteryLeftoversDistinct=`cat $folder/complexTermsSingleExactMatchesRemoved.txt | awk ' { tot[$0]++ } END { for (i in tot) print tot[i],"\t",i } ' | wc -l`
+echo $complexTermsSingleMysteryLeftovers "single mystery leftovers"
+echo $complexTermsSingleMysteryLeftoversDistinct "single mystery leftovers distinct terms"
 
 
-#############################################
-# poke around to find max number of fields
 
-#awk -F'[|]' 'NF>=8' compoundTermsFoundPipeDelimited.txt > compound8Fields.txt
-#grep -Fvxf compound8Fields.txt compoundTermsFoundPipeDelimited.txt > compoundFieldsReduced1.txt
-
-#awk -F'[|]' 'NF>=7' compoundFieldsReduced1.txt > compound7Fields.txt
-#grep -Fvxf compound7Fields.txt compoundFieldsReduced1.txt > compoundFieldsReduced2.txt
-
-#awk -F'[|]' 'NF>=6' compoundFieldsReduced2.txt > compound6Fields.txt
-#grep -Fvxf compound6Fields.txt compoundFieldsReduced2.txt > compoundFieldsReduced3.txt
-
-#awk -F'[|]' 'NF>=5' compoundFieldsReduced3.txt > compound5Fields.txt
-#grep -Fvxf compound5Fields.txt compoundFieldsReduced3.txt > compoundFieldsReduced4.txt
-
-#awk -F'[|]' 'NF>=4' compoundFieldsReduced4.txt > compound4Fields.txt
-#grep -Fvxf compound4Fields.txt compoundFieldsReduced4.txt > compoundFieldsReduced5.txt
-
-#awk -F'[|]' 'NF>=3' compoundFieldsReduced5.txt > compound3Fields.txt
-#grep -Fvxf compound3Fields.txt compoundFieldsReduced5.txt > compoundFieldsReduced6.txt
-
-#awk -F'[|]' 'NF>=2' compoundFieldsReduced6.txt > compound2Fields.txt
-#grep -Fvxf compound2Fields.txt compoundFieldsReduced6.txt > compoundFieldsReduced7.txt
-
-#awk -F'[|]' 'NF>=1' compoundFieldsReduced7.txt > compound1Fields.txt
-
-#wc -l compound8Fields.txt
-#wc -l compound7Fields.txt
-#wc -l compound6Fields.txt
-#wc -l compound5Fields.txt
-#wc -l compound4Fields.txt
-#wc -l compound3Fields.txt
-#wc -l compound2Fields.txt
-#wc -l compound1Fields.txt
-
-# find number of distinct terms
-#cat compound8Fields.txt | awk ' { tot[$0]++ } END { for (i in tot) print tot[i],"\t",i } ' | sort -nr | wc -l
-#cat compound7Fields.txt | awk ' { tot[$0]++ } END { for (i in tot) print tot[i],"\t",i } ' | sort -nr | wc -l
-#cat compound6Fields.txt | awk ' { tot[$0]++ } END { for (i in tot) print tot[i],"\t",i } ' | sort -nr | wc -l
-#cat compound5Fields.txt | awk ' { tot[$0]++ } END { for (i in tot) print tot[i],"\t",i } ' | sort -nr | wc -l
-#cat compound4Fields.txt | awk ' { tot[$0]++ } END { for (i in tot) print tot[i],"\t",i } ' | sort -nr | wc -l
-#cat compound3Fields.txt | awk ' { tot[$0]++ } END { for (i in tot) print tot[i],"\t",i } ' | sort -nr | wc -l
-#cat compound2Fields.txt | awk ' { tot[$0]++ } END { for (i in tot) print tot[i],"\t",i } ' | sort -nr | wc -l
-
-
-# OTHER THINGS TO DO WITH LEFTOVERS
-#grep -vf GPOstateAbbrTerms.csv reduceCompound.txt > stateGPOabbrRemoved.txt
-#grep -Ff GPOstateAbbrTerms.csv reduceCompound.txt > stateGPOabbrFound.txt
-#wc -l stateGPOabbrRemoved.txt 
-#wc -l stateGPOabbrFound.txt 
-
-#grep '\,' stateGPOabbrRemoved.txt  > CommaSep.txt
-#wc -l CommaSep.txt 
-
-
+# create a nice csv file
+echo "stage,# of term instances,# of distinct terms" > $output
+echo "Complex Terms,"$complexTermsFoundTotal","$complexTermsFoundDistinct >> $output
+echo "Split into Single Terms,"$filewc","$filewcdistinct >> $output
+echo "Exact Matches Single Terms,"$complexTermsSingleExactMatchesFoundTotal","$complexTermsSingleExactMatchesFoundDistinct >> $output
+echo "Mystery Leftovers Single Terms,"$complexTermsSingleMysteryLeftovers","$complexTermsSingleMysteryLeftoversDistinct >> $output

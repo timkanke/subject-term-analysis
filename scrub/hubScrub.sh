@@ -1,9 +1,9 @@
 #!bin/bash
 
-result=${PWD##*/}.csv
+result=${PWD##*/}
 
 # combine csv files
-cat df${result}/*.csv >> dfHub.csv
+cat *.csv >> dfHub.csv
 # get hub name
 hubName=`csvgrep -n dfHub.csv | grep "^  3" | cut -c 6- | sed -e 's/ /_/g'`
 mv dfHub.csv $hubName.csv

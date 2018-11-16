@@ -2,7 +2,7 @@
 
 ## Obtain specific DPLA metadata
 Working with a local copy of DPLA metadata in PySpark
-- retrieve csv file containing subject, id, provider, intermediateProvider, and dataProvider
+- create parquet files for each hub with 'id', 'name', 'intermediateProvider', 'dataProvider', and 'subject' fields.
 ```python
 # libraries
 from pyspark.sql.functions import *
@@ -10,26 +10,16 @@ from pyspark.sql.types import StringType
 
 # load data and select columns
 df = spark.read.parquet('/path/to/data')
-df = df.select(df['_source.id'], df['_source.provider.name'], df['_source.intermediateProvider'], df['_source.dataProvider'], df['_source.sourceResource.subject'])
+df_subjects = df.select(df['_source.id'], df['_source.provider.name'], df['_source.intermediateProvider'], df['_source.dataProvider'], df['_source.sourceResource.subject'])
 
-# drop null value subject
-dfSubjectNotNull = df.na.drop(subset=['subject'])
+# create list of providers to find hub names
+dfHubList = df.select('name').distinct()
+dfHubList.show(100, False)
 
-# explode subject, and select other columns
-dfIndivSub = dfSubjectNotNull.select(dfSubjectNotNull.id, dfSubjectNotNull.name.alias('provider'), dfSubjectNotNull.intermediateProvider, dfSubjectNotNull.dataProvider, dfSubjectNotNull.subject, explode(dfSubjectNotNull.subject).alias('subjectHeading')).drop(dfSubjectNotNull.subject)
-
-# flatten schema
-dfIndivSub = dfIndivSub.select(dfIndivSub.subjectHeading.cast(StringType()).alias('subject'), 'id', 'provider', 'intermediateProvider', 'dataProvider')
-
-# get list of hubs with 1 or more terms
-dfHubList = dfIndivSub.select('provider').distinct()
-
-# write as csv, example GPO hub
-dfGPO = dfIndivSub.filter(dfIndivSub.provider.contains('United States Government Publishing Office (GPO)')).select('subject', 'id', 'provider', 'intermediateProvider', 'dataProvider')
-dfGPO.write.csv('/path/to/dfGPO.csv')
+# create individual parquet files for chosen hub template
+#df_hub_name = df_subjects.filter(df_subjects.name.contains('hub_name')).select('id', 'name', 'intermediateProvider', 'dataProvider', 'subject')
+#df.write.parquet('/path/to/hub_name.parquet')
 ```
-- move newly created folder containing files into a folder titled 'data'
-
 
 ## Obtain controlled vocabularies
 The primary vocabularies that are used to sort the subject terms are from Library of Congress, The Getty Research Institute, and OCLC.
