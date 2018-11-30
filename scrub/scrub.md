@@ -82,6 +82,11 @@ tdbquery --loc xal_tdb_store --results CSV --query lcnafQuery.rq > part12.csv
 ```
 - run python script to make lists
 - post processing clean-up tasks
+```bash
+cat lcsh_*.csv >> new.csv
+sed 's/^/"/' new.csv | sed 's/$/"/' > lcnaf.csv
+sed -i '1 i\term' lcnaf.csv
+```
 
 ### The Getty Research Institute
 AAT, TGN, and ULAN
@@ -108,6 +113,9 @@ $ rm temp
 then:
 delete first line (header)
 remove quotes around terms that contain commas
+```bash
+sed -i '1 i\term' VOCAB_NAME.csv
+```
 
 ### OCLC
 - select id and label from each nt file and convert to csv using arq
