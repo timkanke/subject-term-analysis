@@ -3,7 +3,7 @@ This project is a subject term analysis method for DPLA metadata using a collect
 
 **Overview**
 
-This method has three primary stages:
+This method has three stages:
 
 - Obtain
 - Scrub
