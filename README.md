@@ -13,10 +13,11 @@ Each of these stages have their own folder and the directions can be found in a 
 
 **Software requirements**
 
-This process has been developed with Linux and will most likely need refinement to work on other operating systems. Additional required software is:
+This process has been developed with Linux and will most likely need refinement to work on other operating systems. Required software is:
 * Apache Spark
 * Apache Jena ARQ (https://jena.apache.org/documentation/query/index.html)
 * dos2unix (https://sourceforge.net/projects/dos2unix/)
-* python 3
+* Python 3
 * pandas
+* Jupyter Notebook
 
